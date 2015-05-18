@@ -15,9 +15,9 @@ import java.util.List;
  * @author Иван
  */
 public class Ellipse implements Shape{
-    public int x1, y1, x2, y2;
+    private int x1, y1, x2, y2;
     public static int countDot = 2;
-    public static String key = "Элипс";    
+    private static String key = "Элипс";    
     @Override
     public void init(List<Integer> list) {
         this.x1=list.get(0);
@@ -25,5 +25,35 @@ public class Ellipse implements Shape{
         this.x2=list.get(2)-list.get(0);
         this.y2=list.get(3)-list.get(1);
     }
+
+    @Override
+    public String getKey() {
+        return key;
+    }
+
+    @Override
+    public int getCountDot() {
+        return countDot;
+    }
     
+    
+    public int getX1()
+{
+    return this.x1;
+}
+    
+    public int getX2()
+{
+    return this.x2;
+}
+    
+    public int getY1()
+{
+    return this.y1;
+}
+    
+    public int getY2()
+{
+    return this.y2;
+}
 }

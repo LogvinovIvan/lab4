@@ -20,7 +20,7 @@ public class DrawingFillRecatngle implements IDrawShape{
     @Override
     public void paint(Graphics g, Shape shape) {
         FillRectangle fillRectangle = (FillRectangle) shape;
-        g.fillRoundRect(fillRectangle.x1, fillRectangle.y1, fillRectangle.x2, fillRectangle.y2, 10, 10);
+        g.fillRoundRect(fillRectangle.getX1(), fillRectangle.getY1(), fillRectangle.getX2(), fillRectangle.getY2(), fillRectangle.getX3(), fillRectangle.getY3());
     }
     
 }

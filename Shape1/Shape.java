@@ -14,4 +14,6 @@ import java.util.List;
  */
 public interface Shape {
     public void init(List<Integer> list);
+    public String getKey();
+    public int getCountDot ();
 }

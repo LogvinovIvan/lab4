@@ -60,40 +60,40 @@ public class NewJFrame extends javax.swing.JFrame {
         
         
         tableShape = new HashMap<>();
-        tableShape.put(Line.key, new Line());
-        tableShape.put(Ellipse.key, new Ellipse());
-        tableShape.put(Rectangle.key,new Rectangle());
-        tableShape.put(Arc.key,new Arc());
-        tableShape.put(Triangle.key, new Triangle());
-        tableShape.put(FillRectangle.key, new FillRectangle());
+        tableShape.put("линия", new Line());
+        tableShape.put("элипс", new Ellipse());
+        tableShape.put("прямоугольник",new Rectangle());
+        tableShape.put("дуга",new Arc());
+        tableShape.put("треугольник", new Triangle());
+        tableShape.put("прямоугольник 2", new FillRectangle());
         
         
         
         
         hm = new HashMap<>();
-        hm.put(Line.key, new LineFactory());
-        hm.put(Ellipse.key, new EllipseFactory());
-        hm.put(Rectangle.key,  new RectangleFactory());
-        hm.put(Triangle.key, new TrangleFactory());
-        hm.put(Arc.key, new ArcFactory());
-        hm.put(FillRectangle.key, new FillRecatangleFactory());
+        hm.put("линия", new LineFactory());
+        hm.put("элипс", new EllipseFactory());
+        hm.put("прямоугольник",  new RectangleFactory());
+        hm.put("треугольник", new TrangleFactory());
+        hm.put("дуга", new ArcFactory());
+        hm.put("прямоугольник 2", new FillRecatangleFactory());
 
         countDot = new HashMap<>();
-        countDot.put(Line.key, Line.countDot);
-        countDot.put(Ellipse.key, Ellipse.countDot);
-        countDot.put(Rectangle.key, Rectangle.countDot);
-        countDot.put(Triangle.key, Triangle.countDot);
-        countDot.put(Arc.key, Arc.countDot);
-        countDot.put(FillRectangle.key, FillRectangle.countDot);
+        countDot.put("линия", Line.countDot);
+        countDot.put("элипс", Ellipse.countDot);
+        countDot.put("прямоугольник", Rectangle.countDot);
+        countDot.put("треугольник", Triangle.countDot);
+        countDot.put("дуга", Arc.countDot);
+        countDot.put("прямоугольник 2", FillRectangle.countDot);
 
         ListDot = new ArrayList<>();
 
-        choice1.add(Rectangle.key);
-        choice1.add(Ellipse.key);
-        choice1.add(Line.key);
-        choice1.add(Arc.key);
-        choice1.add(FillRectangle.key);
-        choice1.add(Triangle.key);
+        choice1.add("линия");
+        choice1.add("элипс");
+        choice1.add("прямоугольник");
+        choice1.add("треугольник");
+        choice1.add("дуга");
+        choice1.add("прямоугольник 2");
 
     }
 
@@ -255,6 +255,14 @@ public class NewJFrame extends javax.swing.JFrame {
             List<IDrawShape> list2 = classes.addDrawingModules("B:\\Plugins");
             IDrawShape iDrawShape = list1.get(0).createShape();
             List<Shape> list3 = classes.addShapeModules("B:\\Plugins");
+            for(int i = 0; i<list1.size(); i++)
+            {
+                String Key = list3.get(i).getKey();
+                choice1.add(Key);
+                tableShape.put(Key, list3.get(i));
+                countDot.put(Key, list3.get(i).getCountDot());
+                hm.put(Key, list1.get(i));
+            }
         }
         catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
         e.printStackTrace();

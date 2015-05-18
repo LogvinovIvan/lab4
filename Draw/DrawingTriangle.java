@@ -21,9 +21,9 @@ public class DrawingTriangle implements IDrawShape{
     @Override
     public void paint(Graphics g, Shape shape) {
         Triangle triangle = (Triangle) shape;
-         g.drawLine(triangle.x1, triangle.y1, triangle.x2, triangle.y2);
-         g.drawLine(triangle.x1, triangle.y1, triangle.x3, triangle.y3);
-         g.drawLine(triangle.x2, triangle.y2, triangle.x3, triangle.y3);
+         g.drawLine(triangle.getX1(), triangle.getY1(), triangle.getX2(), triangle.getY2());
+         g.drawLine(triangle.getX1(), triangle.getY1(), triangle.getX3(), triangle.getY3());
+         g.drawLine(triangle.getX2(), triangle.getY2(), triangle.getY3(), triangle.getX3());
         
     }
     

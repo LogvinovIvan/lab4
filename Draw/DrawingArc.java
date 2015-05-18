@@ -8,7 +8,7 @@ package Draw;
 
 import java.awt.Graphics;
 import Shape1.Arc;
-import Shape1.Shape;
+import Shape1 .Shape;
 
 /**
  *
@@ -19,7 +19,7 @@ public class DrawingArc implements IDrawShape{
     @Override
     public void paint(Graphics g, Shape shape) {
         Arc arc = (Arc) shape;
-        g.drawArc(arc.x1, arc.y1, arc.x2, arc.y2,arc.x3,arc.y3);
+        g.drawArc(arc.getX1(), arc.getY1(), arc.getX2(), arc.getY2(),arc.getX3(),arc.getY3());
     }
     
 }

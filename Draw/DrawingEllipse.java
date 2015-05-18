@@ -20,7 +20,7 @@ public class DrawingEllipse implements IDrawShape{
     @Override
     public void paint(Graphics g, Shape shape) {
         Ellipse ellipse = (Ellipse) shape;
-        g.drawOval(ellipse.x1, ellipse.y1, ellipse.x2, ellipse.y2);
+        g.drawOval(ellipse.getX1(), ellipse.getY1(), ellipse.getX2(), ellipse.getY2());
     }
     
      

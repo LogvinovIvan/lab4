@@ -15,9 +15,9 @@ import java.util.List;
  * @author Иван
  */
 public class Triangle implements Shape {
- public static String key = "Треугольник";   
+ private static String key = "Треугольник";   
  public static int countDot = 3;
- public int x1, y1, x2, y2,x3,y3;
+ private int x1, y1, x2, y2,x3,y3;
     @Override
     public void init(List<Integer> list) {
         this.x1=list.get(0);
@@ -27,5 +27,46 @@ public class Triangle implements Shape {
         this.x3=list.get(4);
         this.y3=list.get(5);
     }
+
+    @Override
+    public String getKey() {
+       return key;
+    }
+
+    @Override
+    public int getCountDot() {
+        return countDot;
+    }
     
+    
+    
+    public int getX1()
+{
+    return this.x1;
+}
+    
+    public int getX2()
+{
+    return this.x2;
+}
+    
+    public int getX3()
+{
+    return this.x3;
+}
+    
+    public int getY1()
+{
+    return this.y1;
+}
+    
+    public int getY2()
+{
+    return this.y2;
+}
+    
+    public int getY3()
+{
+    return this.y3;
+}
 }

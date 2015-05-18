@@ -18,6 +18,6 @@ public class DrawingRectangle implements IDrawShape {
     @Override
     public void paint(Graphics g, Shape shape) {
         Rectangle rect = (Rectangle) shape;
-        g.drawRect(rect.x1, rect.y1, rect.x2, rect.y2);
+        g.drawRect(rect.getX1(), rect.getY1(), rect.getX2(), rect.getY2());
     }
 }
