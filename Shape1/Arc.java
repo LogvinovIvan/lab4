@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Иван
  */
-public class Arc implements Shape{
+public class Arc extends  baseShape implements Shape{
 private static String key = "Дуга";
 public static int countDot = 3;  
 private int x1, y1, x2, y2,x3,y3;

@@ -6,16 +6,20 @@
 
 package LoadingClasses;
 
-import javaapplication23.PluginLoadException;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import javaapplication23.PluginLoadException;
 import javax.swing.JButton;
 
 /**
@@ -23,7 +27,7 @@ import javax.swing.JButton;
  * @author Иван
  */
 public class PluginsInfo {
-    private Plugin instance;
+        private Plugin instance;
 
 	private String buttonText;
 
@@ -34,8 +38,8 @@ public class PluginsInfo {
 			Properties props = getPluginProps(jarFile);
 			if (props == null)
 				throw new IllegalArgumentException("No props file found");
-
-			String pluginClassName = props.getProperty("main.class")+".class";
+                        
+			String pluginClassName = props.getProperty("main");;
 			if (pluginClassName == null || pluginClassName.length() == 0) {
 				throw new PluginLoadException("Missing property main.class");
 			}
@@ -47,7 +51,7 @@ public class PluginsInfo {
 
 			URL jarURL = jarFile.toURI().toURL();
 			URL[] urls = new URL[]{jarURL};
-                        URLClassLoader classLoader = new URLClassLoader(urls);
+                        URLClassLoader classLoader = URLClassLoader.newInstance(urls);
 			Class pluginClass = classLoader.loadClass(pluginClassName);
 			instance = (Plugin) pluginClass.newInstance();
 		} catch (PluginLoadException e) {
@@ -66,11 +70,13 @@ public class PluginsInfo {
 	private Properties getPluginProps(File file) throws IOException {
 		Properties result = null;
 		JarFile jar = new JarFile(file);
-		Enumeration entries = jar.entries();
-
+		
+                Enumeration entries = jar.entries();
+         
 		while (entries.hasMoreElements()) {
 			JarEntry entry = (JarEntry) entries.nextElement();
-			if (entry.getName().equals("META-INF/MANIFEST.MF")) {
+			 
+                        if (entry.getName().equals("Properties")) {
 				// That's it! Load props
 				InputStream is = null;
 				try {
@@ -86,7 +92,10 @@ public class PluginsInfo {
 		return result;
 	}
 
-	public void setAssociatedButton(JButton associatedButton) {
+	
+        
+        
+        public void setAssociatedButton(JButton associatedButton) {
 		this.associatedButton = associatedButton;
 	}
 

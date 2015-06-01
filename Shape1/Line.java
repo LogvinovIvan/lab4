@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author Иван
  */
-public class Line  implements Shape{
+public class Line extends baseShape implements Shape{
 private int x1, y1, x2, y2;
    private static String key = "Линия";
    public static int countDot = 2;

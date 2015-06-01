@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Иван
  */
-public class FillRectangle implements Shape {
+public class FillRectangle extends baseShape implements Shape {
     private static String key = "Прямоугольник2";
     public static int countDot = 3;
     private int x1, y1, x2, y2,x3,y3;

@@ -8,8 +8,11 @@ package serialization;
 
 import Shape1.Line;
 import Shape1.Shape;
+import Shape1.baseShape;
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,31 +20,24 @@ import java.util.Map;
  * @author Иван
  */
 public class XmlDesirialization {
-Map<String,Class> shapeClasses;
+Map<String,Shape> shapeClasses;
 XStream xstream;
     public XmlDesirialization() {
-      shapeClasses = new HashMap<String, Class>();
-      xstream = new XStream();
+      shapeClasses = new HashMap<String, Shape>();
+      xstream = new XStream(new DomDriver());
+      
     }
     
-   
-    
-    public void addClasses(String key, Class value)
+    public List<baseShape> converteToShape(String xml)
     {
-        shapeClasses.put(key, value);
+        List<baseShape> bShape = (List<baseShape>)xstream.fromXML(xml);
+        
+        return bShape;
     }
 
-
-    public Shape converteToShape(String xml)
+    public Map<String,Shape> getInformMap()
     {
-        String nameClass = xml.substring(xml.indexOf("<"), xml.indexOf("/>"));
-        Class clazz = shapeClasses.get(nameClass);
-        Shape shape;
-        shape = (Shape)xstream.fromXML(xml);
-        shape = (clazz)shape;
-     return shape;
+        return shapeClasses;
     }
-
-
 
 }

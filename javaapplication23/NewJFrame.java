@@ -4,6 +4,7 @@ package javaapplication23;
 
 import Draw.IDrawShape;
 import LoadingClasses.ModuleLoader;
+import LoadingClasses.Plugin;
 import LoadingClasses.PluginsInfo;
 import LoadingClasses.addClasses;
 import Shape1.Arc;
@@ -13,6 +14,7 @@ import Shape1.Line;
 import Shape1.Rectangle;
 import Shape1.Shape;
 import Shape1.Triangle;
+import Shape1.baseShape;
 import factory.ArcFactory;
 import factory.EllipseFactory;
 import factory.FillRecatangleFactory;
@@ -24,6 +26,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +37,13 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+
 import serialization.XmLSerialization;
+import serialization.XmlDesirialization;
 
 
 
@@ -58,14 +69,16 @@ public class NewJFrame extends javax.swing.JFrame {
     Map<String, Integer> countDot;
     Map<String, Shape> tableShape;
     List<Integer> ListDot;
+    XmlDesirialization xmlDesirialization;
+    List<baseShape> shapes;
+    Map<String,Plugin> functionPlugins;
     
     private int i = 1;
 
     public NewJFrame() {
         initComponents();
-        
-        
-        
+        shapes = new ArrayList<>();
+        xmlDesirialization = new XmlDesirialization();
         
         tableShape = new HashMap<>();
         tableShape.put("линия", new Line());
@@ -121,6 +134,8 @@ public class NewJFrame extends javax.swing.JFrame {
         button1 = new java.awt.Button();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        choice2 = new java.awt.Choice();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -168,6 +183,13 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setText("jButton3");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -187,13 +209,18 @@ public class NewJFrame extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(button1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton2))
+                            .addComponent(choice2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton2)
+                                    .addComponent(jButton3))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(39, 39, 39)
                         .addComponent(choice1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -202,7 +229,11 @@ public class NewJFrame extends javax.swing.JFrame {
                         .addGap(23, 23, 23)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(39, 39, 39)
-                        .addComponent(jButton2))
+                        .addComponent(jButton2)
+                        .addGap(55, 55, 55)
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(choice2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addComponent(canvas1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -252,12 +283,10 @@ public class NewJFrame extends javax.swing.JFrame {
             ListDot.add(evt.getY());
             IFactory s = hm.get(choice1.getSelectedItem());
             Shape shape = tableShape.get(choice1.getSelectedItem());
-            shape.init(ListDot);
-            XmLSerialization xml = new XmLSerialization();
-            String str = xml.converte(shape);
+            shape.init(ListDot);      
+            shapes.add((baseShape)shape);
             IDrawShape drawShape = s.createShape();
             drawShape.paint(canvas2.getGraphics(), shape); 
-            
             ListDot.clear();
             i = 1;
         }
@@ -322,29 +351,41 @@ public class NewJFrame extends javax.swing.JFrame {
                 Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
 			}
+		functionPlugins = new HashMap<>();
+           for(PluginsInfo plugin: plugins.values())
+           {
+               String str = plugin.getButtonText();
+               Plugin pl = plugin.getPluginInstance();
+               functionPlugins.put(str, pl);
+               choice2.add(str);
+           }
 		
-
+                
+	
 		
-                Shape shape = null;
-		synchronized (plugins) {
-			for (PluginsInfo pluginInfo : plugins.values()) {
-				final PluginsInfo plugin = pluginInfo;
-				final JButton button = new JButton(pluginInfo.getButtonText());
-				plugin.setAssociatedButton(button);
-				button.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						plugin.getPluginInstance().invoke(shape);
-					}
-				});
-				
-                                
-                                this.jPanel1.add(button);
-			}
-		}
 
 		
 	
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        XmLSerialization xls = new XmLSerialization();
+        String xml = xls.converte(shapes);
+        Plugin plugin = functionPlugins.get(choice2.getSelectedItem());
+        plugin.transform(xml);
+        //TransformationToJSON transformationToJSON = new TransformationToJSON();
+        //transformationToJSON.transform(xml);
+        //TransformWithXSLT transformWithXSLT = new TransformWithXSLT();
+        //transformWithXSLT.transform(xml);
+        
+//        shapes.clear();
+  //      shapes = xmlDesirialization.converteToShape(xml);
+    //    TransformationToJSON toJSON = new TransformationToJSON();
+      //  String json = toJSON.transform(xml);
+        //TransformationFromJSON fromJSON = new TransformationFromJSON();
+        //xml = fromJSON.transform(json);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
    
 
@@ -353,8 +394,10 @@ public class NewJFrame extends javax.swing.JFrame {
     private java.awt.Canvas canvas1;
     private java.awt.Canvas canvas2;
     private java.awt.Choice choice1;
+    private java.awt.Choice choice2;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

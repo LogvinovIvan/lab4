@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Иван
  */
-public class Triangle implements Shape {
+public class Triangle extends baseShape implements Shape {
  private static String key = "Треугольник";   
  public static int countDot = 3;
  private int x1, y1, x2, y2,x3,y3;
